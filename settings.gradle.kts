@@ -12,9 +12,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
-
 }
 
 rootProject.name = "ReTastyLog"
 include(":app")
+include(":core:common")
