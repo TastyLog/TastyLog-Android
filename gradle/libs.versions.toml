@@ -1,12 +1,17 @@
 [versions]
 android-gradle-plugin = "8.3.2"
+compileSdk = "34"
+minSdk = "28"
+targetSdk = "34"
+versionCode = "1"
+appVersion = "1.0.0"
 
 # Kotlin
 kotlin = "1.9.0"
-kotlinx-coroutines = "1.7.3"
-kotlinx-serialization-json = "1.5.1"
-kotlinx-datetime = "0.4.0"
-kotlinx-collections = "0.3.7"
+kotlin-coroutines = "1.7.3"
+kotlin-serialization-json = "1.5.1"
+kotlin-datetime = "0.4.0"
+kotlin-collections = "0.3.7"
 ktlint = "12.0.3"
 ksp = "1.9.10-1.0.13"
 
@@ -21,6 +26,7 @@ androidx-navigation = "2.8.1"
 androidx-activity-ktx = "1.9.2"
 androidx-splash-screen = "1.0.1"
 androidx-paging = "3.3.2"
+desugarJdk = "2.0.3"
 
 # Dagger
 hilt = "2.48"
@@ -28,7 +34,6 @@ javax = "1"
 
 # Third-Party Libraries
 retrofit = "2.9.0"
-retrofit-kotlinx-serialization-json = "1.0.0"
 okhttp = "4.11.0"
 timber = "5.0.1"
 
@@ -52,18 +57,21 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" } # AndroidX Lifecycle Runtime KTX 라이브러리
+lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidx-lifecycle" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity-ktx" } # AndroidX Activity KTX 라이브러리
 androidx-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidx-splash-screen" } # AndroidX SplashScreen 라이브러리
 androidx-paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "androidx-paging" } # AndroidX Paging 라이브러리
 androidx-paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "androidx-paging" } # AndroidX Paging 공용 라이브러리
 android-fragment-navigation = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidx-navigation" } # AndroidX Fragment Navigation 라이브러리
+desugarLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdk" }
 
-kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" } # Android용 Kotlin Coroutines
-kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" } # Kotlin Coroutines 핵심 라이브러리
-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" } # Kotlinx JSON 직렬화 라이브러리
-kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" } # Kotlinx 날짜/시간 라이브러리
-kotlinx-collections = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-collections" } # Kotlinx 불변 컬렉션 라이브러리
+kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlin-coroutines" } # Android용 Kotlin Coroutines
+kotlin-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlin-coroutines" } # Kotlin Coroutines 핵심 라이브러리
+kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization-json" } # Kotlinx JSON 직렬화 라이브러리
+kotlin-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlin-datetime" } # Kotlinx 날짜/시간 라이브러리
+kotlin-collections = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlin-collections" } # Kotlinx 불변 컬렉션 라이브러리
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
@@ -87,3 +95,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+
+[bundles]
+lifecycle = ["lifecycle", "lifecycle-viewmodel","lifecycle-livedata"]
