@@ -19,3 +19,4 @@ dependencyResolutionManagement {
 rootProject.name = "ReTastyLog"
 include(":app")
 include(":core:common")
+include(":core:designsystem")

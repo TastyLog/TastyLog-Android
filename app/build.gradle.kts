@@ -25,6 +25,7 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
+    implementation(project(":core:designsystem"))
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
