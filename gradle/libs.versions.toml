@@ -10,6 +10,7 @@ appVersion = "1.0.0"
 kotlin = "1.9.0"
 kotlin-coroutines = "1.7.3"
 kotlin-serialization-json = "1.5.1"
+kotlin-serialization-converter = "1.0.0"
 kotlin-datetime = "0.4.0"
 kotlin-collections = "0.3.7"
 ktlint = "12.0.3"
@@ -85,6 +86,12 @@ hilt-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin"
 hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 hilt-testing-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-kotlin-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "kotlin-serialization-converter" }
+
+okhttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okhttp" }
+okhttp = { module = "com.squareup.okhttp3:okhttp" }
+okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor" }
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
@@ -99,3 +106,4 @@ kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 
 [bundles]
 lifecycle = ["lifecycle", "lifecycle-viewmodel","lifecycle-livedata"]
+retrofit = ["retrofit", "retrofit-kotlin-serialization-converter"]

@@ -27,7 +27,9 @@ internal fun Project.configureAndroidCommonPlugin() {
     // 공통적인 Android 설정 적용
     extensions.getByType<BaseExtension>().apply {
         defaultConfig {
-            // buildConfigField("String", "TASTYLOG_BASE_URL", properties["BASE_URL"] as String)
+            val baseUrl = properties["BASE_URL"] as? String ?: "https://default.url/"
+            buildConfigField("String", "EXAMPLE_BASE_URL", "\"$baseUrl\"")
+//             buildConfigField("String", "EXAMPLE_BASE_URL", properties["BASE_URL"] as String)
         }
         buildFeatures.apply {
             viewBinding = true
