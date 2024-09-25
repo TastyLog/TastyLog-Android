@@ -25,13 +25,14 @@ firebaseMessagingKtx = "24.0.0"
 androidx-lifecycle = "2.8.6"
 androidx-navigation = "2.8.1"
 androidx-activity-ktx = "1.9.2"
+fragment-ktx = "1.8.3"
 androidx-splash-screen = "1.0.1"
 androidx-paging = "3.3.2"
 desugarJdk = "2.0.3"
 
 # Dagger
 hilt = "2.48"
-javax = "1"
+javax-inject = "1"
 
 # Third-Party Libraries
 retrofit = "2.9.0"
@@ -65,6 +66,7 @@ androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", ve
 androidx-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidx-splash-screen" } # AndroidX SplashScreen 라이브러리
 androidx-paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "androidx-paging" } # AndroidX Paging 라이브러리
 androidx-paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "androidx-paging" } # AndroidX Paging 공용 라이브러리
+fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment-ktx" }
 android-fragment-navigation = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidx-navigation" } # AndroidX Fragment Navigation 라이브러리
 desugarLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdk" }
 
@@ -92,6 +94,8 @@ retrofit-kotlin-serialization-converter = { group = "com.jakewharton.retrofit", 
 okhttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okhttp" }
 okhttp = { module = "com.squareup.okhttp3:okhttp" }
 okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor" }
+
+javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

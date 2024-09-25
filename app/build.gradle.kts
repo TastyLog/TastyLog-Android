@@ -24,6 +24,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain:home"))
+    implementation(project(":data:home"))
+    implementation(project(":feature:home"))
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:network"))
