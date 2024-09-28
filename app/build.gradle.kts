@@ -26,10 +26,15 @@ android {
 dependencies {
     implementation(project(":domain:home"))
     implementation(project(":data:home"))
+    implementation(project(":domain:onboarding"))
+    implementation(project(":data:onboarding"))
+    implementation(project(":feature:onboarding"))
     implementation(project(":feature:home"))
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:network"))
+    implementation(project(":core:datastore"))
+
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?><!--Add ViewPage2, TabLayout & 2 MaterialButton to your layout.-->
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dialogInfo"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <!--ViewPager2-->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_intro"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!--indicator-->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tl_intro_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        app:tabBackground="@drawable/intro_tab_selector"
+        app:tabGravity="center"
+        app:tabIndicatorHeight="0dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <!--SKIP-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_intro_skip"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/pretendard"
+            android:gravity="center"
+            android:text="@string/intro_skip"
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@android:color/darker_gray"
+            android:textStyle="bold"
+            app:cornerRadius="30dp" />
+
+        <View
+            android:id="@+id/view_skip_between_next"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+        <!--Next-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_intro_next"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/pretendard"
+            android:text="@string/intro_next"
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/main_color"
+            android:textStyle="bold"
+            app:rippleColor="@color/transparent"
+            app:cornerRadius="30dp" />
+
+    </LinearLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

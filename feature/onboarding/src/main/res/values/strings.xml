@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">ReTastyLog</string>
+    <string name="none">none</string>
+    <string name="intro_get_started">맛로그 시작하기</string>
+    <string name="intro_next">다음</string>
+    <string name="intro_title_1">맛로그</string>
+    <string name="intro_title_2">위치권한 설정</string>
+    <string name="intro_title_3">유튜버들의 맛집탐방</string>
+    <string name="intro_description_1">페이지를 넘겨 서비스 설명보기</string>
+    <string name="intro_description_2">앱의 서비스를 이용할려면 위치악관 동의를 클릭해주세요</string>
+    <string name="intro_description_3">유튜버들이 방문한 맛집을 함께 탐방해봐요!</string>
+    <string name="intro_skip">생략하기</string>
+    <string name="menu_view_pager2">View Pager2</string>
+    <string name="tab1">Tab 1</string>
+    <string name="tab2">Tab 2</string>
+    <string name="tab3">Tab 3</string>
+
+</resources>
