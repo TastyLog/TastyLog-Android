@@ -19,7 +19,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val EXAMPLE_BASE_URL = BuildConfig.EXAMPLE_BASE_URL
+    private const val TASTYLOG_BASE_URL = BuildConfig.TASTYLOG_BASE_URL
 
     @Provides
     @Singleton
@@ -65,7 +65,7 @@ object NetworkModule {
         converterFactory: Converter.Factory,
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl(EXAMPLE_BASE_URL)
+            .baseUrl(TASTYLOG_BASE_URL)
             .client(client)
             .addConverterFactory(converterFactory)
             .build()
