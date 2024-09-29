@@ -12,4 +12,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:network"))
     implementation(libs.fragment.ktx)
+    implementation(libs.naver.map.sdk)
+    implementation(libs.play.services.location)
+    implementation(libs.play.services.maps)
 }
