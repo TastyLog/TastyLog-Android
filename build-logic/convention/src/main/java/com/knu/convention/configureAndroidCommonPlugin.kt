@@ -27,9 +27,17 @@ internal fun Project.configureAndroidCommonPlugin() {
     // 공통적인 Android 설정 적용
     extensions.getByType<BaseExtension>().apply {
         defaultConfig {
-            val baseUrl = properties["BASE_URL"] as? String ?: "https://default.url/"
-            buildConfigField("String", "EXAMPLE_BASE_URL", "\"$baseUrl\"")
+            val baseUrl = properties["BASE_URL"] as? String ?: ""
+            val naverMapClientId = properties["NAVER_MAP_CLIENT_ID"] as? String ?: ""
+
+            buildConfigField("String", "TASTYLOG_BASE_URL", "\"$baseUrl\"")
 //             buildConfigField("String", "EXAMPLE_BASE_URL", properties["BASE_URL"] as String)
+
+            manifestPlaceholders.putAll(
+                mapOf(
+                    "naverMapClientId" to naverMapClientId
+                )
+            )
         }
         buildFeatures.apply {
             viewBinding = true

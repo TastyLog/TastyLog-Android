@@ -1,6 +1,6 @@
-package com.knu.network.di
+package com.knu.home.di
 
-import com.knu.network.api.ExampleApi
+import com.knu.home.service.RestaurantService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,11 +10,10 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ExampleModule {
+object RestaurantServiceModule {
     @Provides
     @Singleton
-    fun provideExampleApi(retrofit: Retrofit): ExampleApi =
-        retrofit.create(
-            ExampleApi::class.java,
-        )
+    fun provideRestaurantService(retrofit: Retrofit): RestaurantService {
+        return retrofit.create(RestaurantService::class.java)
+    }
 }
