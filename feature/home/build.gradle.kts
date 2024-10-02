@@ -15,4 +15,6 @@ dependencies {
     implementation(libs.naver.map.sdk)
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
+    implementation(libs.circle.imageview)
+    implementation(libs.coil)
 }
