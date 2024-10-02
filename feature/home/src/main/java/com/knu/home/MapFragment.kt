@@ -7,14 +7,20 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.knu.common.view.SpaceItemDecoration
 import com.knu.common.view.viewBinding
+import com.knu.home.adapter.YoutuberAdapter
 import com.knu.home.entity.RestaurantEntity
+import com.knu.home.entity.YoutuberEntity
+import com.knu.home.utils.createCustomMarker
 import com.knu.retastylog.home.R
 import com.knu.retastylog.home.databinding.MapFragmentBinding
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -24,19 +30,123 @@ class MapFragment : Fragment(R.layout.map_fragment) {
     private val binding by viewBinding(MapFragmentBinding::bind)
     private lateinit var naverMap: NaverMap
     private lateinit var location: Location
+    private lateinit var youtuberAdapter: YoutuberAdapter
 
-    private val restaurantViewModel: RestaurantViewModel by viewModels() // ViewModel 주입
+    private val restaurantViewModel: RestaurantViewModel by viewModels()
+    private val youtuberViewModel: YoutuberViewModel by viewModels()
+
+    private val selectedYoutubers = mutableSetOf<YoutuberEntity>()
+    private val markers = mutableMapOf<String, Marker>() // 레스토랑 uniqueKey와 마커를 연결
+    private var allRestaurantList: List<RestaurantEntity> = emptyList() // 전체 레스토랑 리스트
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.mvHome.onCreate(savedInstanceState)
+        binding.mvHome.onCreate(savedInstanceState) // MapView 초기화
+        setupMapView()  // 지도 설정
+        setupLocation() // 위치 설정
+        setupRecyclerView() // 유튜버 리스트 설정
+        observeYoutuberList()
+        observeRestaurantList()
+    }
+
+    // MapView 초기화 + 레스트랑 리스트 로드
+    private fun setupMapView() {
         binding.mvHome.getMapAsync { map ->
             naverMap = map
-            initializeMap()
+            initializeMap() // 지도 초기화
             loadRestaurantList() // 레스토랑 리스트 로드
         }
+    }
 
-        location = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    // 위치 정보 설정
+    private fun setupLocation() {
+        location = getLocationFromArguments()
+    }
+
+    // RecyclerView 설정, 유튜버 클릭 시 마커 필터링
+    private fun setupRecyclerView() {
+        youtuberAdapter = YoutuberAdapter { clickedYoutuber, isSelected ->
+            if (isSelected) {
+                selectedYoutubers.add(clickedYoutuber)
+            } else {
+                selectedYoutubers.remove(clickedYoutuber)
+            }
+            // 마커 업데이트
+            updateMapMarkersBySelectedYoutubers()
+        }
+
+        binding.rvInfluencerChip.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = youtuberAdapter
+            addItemDecoration(SpaceItemDecoration(16))
+        }
+    }
+
+    // 지도 초기화, 현재 위치로 카메라 포지션 설정
+    private fun initializeMap() {
+        val cameraPosition = CameraPosition(LatLng(location.latitude, location.longitude), 15.0)
+        naverMap.cameraPosition = cameraPosition
+    }
+
+    private fun observeRestaurantList() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            restaurantViewModel.restaurantList.collect { restaurantList ->
+                allRestaurantList = restaurantList
+                updateMapMarkers(restaurantList) // 지도에 마커 업데이트
+            }
+        }
+    }
+
+    private fun observeYoutuberList() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            youtuberViewModel.youtuberList.collect { youtuberList ->
+                youtuberAdapter.submitList(youtuberList) // 유튜버 리스트를 어댑터로 전달
+            }
+        }
+    }
+
+    // 마커 필터링
+    private fun updateMapMarkersBySelectedYoutubers() {
+        val allRestaurants = restaurantViewModel.restaurantList.value
+
+        val filteredRestaurants = if (selectedYoutubers.isEmpty()) {
+            allRestaurants
+        } else {
+            allRestaurants.filter { restaurant ->
+                selectedYoutubers.any { it.youtuberId == restaurant.youtuberId }
+            }
+        }
+
+        updateMapMarkers(filteredRestaurants)
+    }
+
+    // 레스토랑 리스트 기반으로 마커를 지도에 업데이트
+    private fun updateMapMarkers(restaurantList: List<RestaurantEntity>) {
+        markers.values.forEach { it.map = null }
+        markers.clear()
+
+        restaurantList.forEach { restaurant ->
+            lifecycleScope.launch {
+                val markerBitmap = createCustomMarker(requireContext(), restaurant.youtuberProfile, restaurant.name)
+                val marker = Marker().apply {
+                    position = LatLng(restaurant.latitude, restaurant.longitude)
+//                    captionText = restaurant.name // RestaurantName은 넣을 지 말지 고민 해보기
+                    icon = OverlayImage.fromBitmap(markerBitmap)
+                    map = naverMap
+                }
+                markers[restaurant.uniqueKey] = marker
+            }
+        }
+    }
+
+    // 레스토랑 리스트를 로드
+    private fun loadRestaurantList() {
+        restaurantViewModel.loadRestaurantList(location.latitude, location.longitude)
+    }
+
+    // 인자로부터 위치 정보 받아오기
+    private fun getLocationFromArguments(): Location {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             arguments?.getParcelable(LOCATION_KEY, Location::class.java)
         } else {
             @Suppress("DEPRECATION")
@@ -44,46 +154,6 @@ class MapFragment : Fragment(R.layout.map_fragment) {
         } ?: Location("").apply {
             latitude = DEFAULT_LATITUDE
             longitude = DEFAULT_LONGITUDE
-        }
-
-        observeRestaurantList() // ViewModel 데이터 관찰
-    }
-
-    // 지도 초기화
-    private fun initializeMap() {
-        val cameraPosition = CameraPosition(
-            LatLng(location.latitude, location.longitude), 15.0,
-        )
-        naverMap.cameraPosition = cameraPosition
-
-        val marker = Marker().apply {
-            position = LatLng(location.latitude, location.longitude)
-            map = naverMap
-        }
-    }
-
-    // ViewModel의 레스토랑 리스트 데이터를 구독
-    private fun observeRestaurantList() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            restaurantViewModel.restaurantList.collect { restaurantList ->
-                updateMapMarkers(restaurantList)
-            }
-        }
-    }
-
-    // 레스토랑 리스트 조회
-    private fun loadRestaurantList() {
-        restaurantViewModel.loadRestaurantList(location.latitude, location.longitude)
-    }
-
-    // 지도에 마커 업데이트
-    private fun updateMapMarkers(restaurantList: List<RestaurantEntity>) {
-        restaurantList.forEach { restaurant ->
-            val marker = Marker().apply {
-                position = LatLng(restaurant.latitude, restaurant.longitude)
-                captionText = restaurant.name
-                map = naverMap
-            }
         }
     }
 
