@@ -26,7 +26,9 @@ class RestaurantViewModel @Inject constructor(
                     _restaurantList.value = emptyList()
                 }
                 .collect { restaurantList ->
-                    _restaurantList.value = restaurantList
+                    // 중복된 레스토랑 제거 처리
+                    val distinctRestaurantList = restaurantList.distinctBy { it.uniqueKey }
+                    _restaurantList.value = distinctRestaurantList
                 }
         }
     }

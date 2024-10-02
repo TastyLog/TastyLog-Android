@@ -29,9 +29,10 @@ internal fun Project.configureAndroidCommonPlugin() {
         defaultConfig {
             val baseUrl = properties["BASE_URL"] as? String ?: ""
             val naverMapClientId = properties["NAVER_MAP_CLIENT_ID"] as? String ?: ""
+            val s3BaseUrl = properties["S3_BASE_URL"] as? String ?: ""
 
             buildConfigField("String", "TASTYLOG_BASE_URL", "\"$baseUrl\"")
-//             buildConfigField("String", "EXAMPLE_BASE_URL", properties["BASE_URL"] as String)
+            buildConfigField("String", "S3_BASE_URL", "\"$s3BaseUrl\"")
 
             manifestPlaceholders.putAll(
                 mapOf(
