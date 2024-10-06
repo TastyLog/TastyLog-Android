@@ -17,4 +17,7 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.circle.imageview)
     implementation(libs.coil)
+    implementation(libs.custom.rating.bar)
+    implementation(libs.youtubeplayer)
+    implementation(libs.kakao.share)
 }
