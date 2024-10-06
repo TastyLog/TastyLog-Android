@@ -39,4 +39,6 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
+
+    implementation(libs.kakao.share)
 }

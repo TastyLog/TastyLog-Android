@@ -35,6 +35,8 @@ class MapFragment : Fragment(R.layout.map_fragment) {
     private val restaurantViewModel: RestaurantViewModel by viewModels()
     private val youtuberViewModel: YoutuberViewModel by viewModels()
 
+    private lateinit var bottomSheetHelper: BottomSheetHelper
+
     private val selectedYoutubers = mutableSetOf<YoutuberEntity>()
     private val markers = mutableMapOf<String, Marker>() // 레스토랑 uniqueKey와 마커를 연결
     private var allRestaurantList: List<RestaurantEntity> = emptyList() // 전체 레스토랑 리스트
@@ -42,6 +44,7 @@ class MapFragment : Fragment(R.layout.map_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.mvHome.onCreate(savedInstanceState) // MapView 초기화
+        initializeBottomSheetHelper() // BottomSheet 초기화
         setupMapView()  // 지도 설정
         setupLocation() // 위치 설정
         setupRecyclerView() // 유튜버 리스트 설정
@@ -56,6 +59,12 @@ class MapFragment : Fragment(R.layout.map_fragment) {
             initializeMap() // 지도 초기화
             loadRestaurantList() // 레스토랑 리스트 로드
         }
+    }
+
+    private fun initializeBottomSheetHelper() {
+        val listButton = binding.btnListRestaurantDialog
+        bottomSheetHelper = BottomSheetHelper.from(binding.root, listButton, viewLifecycleOwner)
+        bottomSheetHelper.initializeBottomSheet()
     }
 
     // 위치 정보 설정
@@ -133,6 +142,11 @@ class MapFragment : Fragment(R.layout.map_fragment) {
 //                    captionText = restaurant.name // RestaurantName은 넣을 지 말지 고민 해보기
                     icon = OverlayImage.fromBitmap(markerBitmap)
                     map = naverMap
+
+                    setOnClickListener {
+                        bottomSheetHelper.showBottomSheetWithRestaurantInfo(restaurant)
+                        true
+                    }
                 }
                 markers[restaurant.uniqueKey] = marker
             }

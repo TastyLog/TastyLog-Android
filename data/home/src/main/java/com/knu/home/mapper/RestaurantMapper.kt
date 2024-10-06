@@ -22,7 +22,7 @@ class RestaurantMapper @Inject constructor() {
             naverLink = dto.naverLink,
             totalReviews = dto.totalReviews,
             rating = dto.rating.toFloat(),
-            representativeImage = dto.representativeImage,
+            representativeImage = s3BaseUrl + dto.representativeImage,
             youtuberId = dto.youtuberId,
             channelId = dto.channelId,
             distance = dto.distance

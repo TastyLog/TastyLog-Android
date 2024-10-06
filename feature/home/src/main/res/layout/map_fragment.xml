@@ -33,4 +33,9 @@
         android:textColor="@color/black"
         android:textSize="11sp" />
 
+    <include
+        android:id="@+id/bottomSheetLayout"
+        layout="@layout/item_bottom_sheet"
+        android:visibility="invisible" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
