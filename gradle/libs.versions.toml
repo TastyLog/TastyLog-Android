@@ -54,8 +54,9 @@ play-services-location = "21.0.0"
 play-services-maps = "18.2.0"
 lottie = "5.0.2"
 circle-imageview = "3.1.0"
-#simpleratingbar = "0.1.5"
+custom-rating-bar = "1.0.0"
 youtubeplayer = "12.1.0"
+kakao-sdk = "2.11.2"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -113,8 +114,9 @@ play-services-location = { group = "com.google.android.gms", name = "play-servic
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "play-services-maps" }
 lottie = {group = "com.airbnb.android", name = "lottie", version.ref = "lottie"}
 circle-imageview = { group = "de.hdodenhof", name = "circleimageview", version.ref = "circle-imageview" }
-#simpleratingbar = {group="com.iarcuschin", name = "simpleratingbar", version.ref="simpleratingbar"}
+custom-rating-bar = { group = "io.github.moonsukang", name = "custom-rating-bar", version.ref = "custom-rating-bar" }
 youtubeplayer = { group = "com.pierfrancescosoffritti.androidyoutubeplayer", name = "core", version.ref = "youtubeplayer" }
+kakao-share = { group = "com.kakao.sdk", name = "v2-share", version.ref = "kakao-sdk" }
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
