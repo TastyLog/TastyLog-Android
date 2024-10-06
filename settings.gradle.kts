@@ -15,6 +15,9 @@ dependencyResolutionManagement {
         maven{
             url = uri("https://repository.map.naver.com/archive/maven")
         }
+        maven{
+            url = uri("https://devrepo.kakao.com/nexus/content/groups/public/")
+        }
         gradlePluginPortal()
     }
 }
