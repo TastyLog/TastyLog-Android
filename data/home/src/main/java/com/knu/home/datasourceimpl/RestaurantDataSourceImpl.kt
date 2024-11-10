@@ -13,8 +13,10 @@ class RestaurantDataSourceImpl @Inject constructor(
     override suspend fun fetchRestaurantList(
         latitude: Double,
         longitude: Double,
+        page: Int,
+        size: Int,
     ): BaseResponse<List<ResponseRestaurantDto>> {
-        val response = restaurantService.getRestaurantList(latitude, longitude)
+        val response = restaurantService.getRestaurantList(latitude, longitude, page, size)
         return BaseResponse(
             code = response.code,
             message = response.message,

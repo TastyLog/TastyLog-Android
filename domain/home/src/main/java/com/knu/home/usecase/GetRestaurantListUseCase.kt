@@ -8,7 +8,12 @@ import javax.inject.Inject
 class GetRestaurantListUseCase @Inject constructor(
     private val restaurantRepository: RestaurantRepository
 ) {
-    suspend operator fun invoke(latitude: Double, longitude: Double): Flow<List<RestaurantEntity>> {
-        return restaurantRepository.getRestaurantList(latitude, longitude)
+    suspend operator fun invoke(
+        latitude: Double,
+        longitude: Double,
+        page: Int = 0,   // 기본값 0
+        size: Int = 1000   // 기본값 1000
+    ): Flow<List<RestaurantEntity>> {
+        return restaurantRepository.getRestaurantList(latitude, longitude, page, size)
     }
 }
