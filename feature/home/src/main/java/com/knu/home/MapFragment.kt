@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.kms.list.RestaurantListFragment
 import com.knu.common.view.SpaceItemDecoration
 import com.knu.common.view.viewBinding
 import com.knu.home.adapter.YoutuberAdapter
@@ -48,6 +49,7 @@ class MapFragment : Fragment(R.layout.map_fragment) {
         setupMapView()  // 지도 설정
         setupLocation() // 위치 설정
         setupRecyclerView() // 유튜버 리스트 설정
+        setupListRestaurantButtonClickListener() // 리스트 버튼 설정
         observeYoutuberList()
         observeRestaurantList()
     }
@@ -90,6 +92,17 @@ class MapFragment : Fragment(R.layout.map_fragment) {
             addItemDecoration(SpaceItemDecoration(16))
         }
     }
+
+    private fun setupListRestaurantButtonClickListener() {
+        binding.btnListRestaurantDialog.setOnClickListener {
+            val restaurantListFragment = RestaurantListFragment.newInstance(location)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, restaurantListFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+    }
+
 
     // 지도 초기화, 현재 위치로 카메라 포지션 설정
     private fun initializeMap() {
