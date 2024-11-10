@@ -57,6 +57,9 @@ circle-imageview = "3.1.0"
 custom-rating-bar = "1.0.0"
 youtubeplayer = "12.1.0"
 kakao-sdk = "2.11.2"
+shimmer = "0.5.0"
+navigationFragmentKtx = "2.8.3"
+navigationUiKtx = "2.8.3"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -117,6 +120,9 @@ circle-imageview = { group = "de.hdodenhof", name = "circleimageview", version.r
 custom-rating-bar = { group = "io.github.moonsukang", name = "custom-rating-bar", version.ref = "custom-rating-bar" }
 youtubeplayer = { group = "com.pierfrancescosoffritti.androidyoutubeplayer", name = "core", version.ref = "youtubeplayer" }
 kakao-share = { group = "com.kakao.sdk", name = "v2-share", version.ref = "kakao-sdk" }
+shimmer = {group = "com.facebook.shimmer", name = "shimmer", version.ref = "shimmer"}
+androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
