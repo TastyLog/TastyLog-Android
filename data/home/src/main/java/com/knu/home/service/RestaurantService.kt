@@ -12,7 +12,7 @@ interface RestaurantService {
     suspend fun getRestaurantList(
         @Path("latitude") latitude: Double,
         @Path("longitude") longitude: Double,
-        @Query("pages") page: Int = 0,
+        @Query("page") page: Int = 0,
         @Query("size") size: Int = 1000,
     ): BaseResponse<ResponseRestaurantListDto>
 }

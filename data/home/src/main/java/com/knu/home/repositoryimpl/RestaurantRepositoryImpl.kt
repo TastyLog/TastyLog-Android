@@ -16,8 +16,13 @@ class RestaurantRepositoryImpl(
         const val SUCCESS_CODE = 1
     }
 
-    override suspend fun getRestaurantList(latitude: Double, longitude: Double): Flow<List<RestaurantEntity>> = flow {
-        val response = dataSource.fetchRestaurantList(latitude, longitude)
+    override suspend fun getRestaurantList(
+        latitude: Double,
+        longitude: Double,
+        page: Int,
+        size: Int,
+    ): Flow<List<RestaurantEntity>> = flow {
+        val response = dataSource.fetchRestaurantList(latitude, longitude, page, size)
         if (response.code == SUCCESS_CODE) {
             val restaurants = mapper.mapToDomainList(response.data ?: emptyList())
             emit(restaurants)
