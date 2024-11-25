@@ -29,12 +29,15 @@ internal fun Project.configureAndroidCommonPlugin() {
         defaultConfig {
             val baseUrl = properties["BASE_URL"] as? String ?: ""
             val naverMapClientId = properties["NAVER_MAP_CLIENT_ID"] as? String ?: ""
+            val naverMapClientSecret = properties["NAVER_MAP_CLIENT_SECRET"] as? String ?: ""
             val s3BaseUrl = properties["S3_BASE_URL"] as? String ?: ""
             val kakaoNativeAppKey = properties["KAKAO_NATIVE_APP_KEY"] as? String ?: ""
 
             buildConfigField("String", "TASTYLOG_BASE_URL", "\"$baseUrl\"")
             buildConfigField("String", "S3_BASE_URL", "\"$s3BaseUrl\"")
             buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"$kakaoNativeAppKey\"")
+            buildConfigField("String", "NAVER_MAP_CLIENT_ID", "\"$naverMapClientId\"")
+            buildConfigField("String", "NAVER_MAP_CLIENT_SECRET", "\"$naverMapClientSecret\"")
 
             manifestPlaceholders.putAll(
                 mapOf(
