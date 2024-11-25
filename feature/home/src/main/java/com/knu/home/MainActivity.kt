@@ -15,14 +15,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.kms.list.RestaurantDetailFragment
+import com.kms.list.RestaurantListFragment
 import com.knu.common.view.viewBinding
+import com.knu.navigation.NavigationActions
+import com.knu.navigation.NavigationHandler
 import com.knu.retastylog.home.R
 import com.knu.retastylog.home.databinding.MainActivityBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationHandler {
 
     private val binding by viewBinding(MainActivityBinding::inflate)
 
@@ -43,6 +47,26 @@ class MainActivity : AppCompatActivity() {
 
         handleLocationServiceAndPermission()
     }
+
+    override fun navigate(action: NavigationActions) {
+        when (action) {
+            is NavigationActions.ToList -> {
+                val fragment = RestaurantListFragment.newInstance(action.location)
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+            is NavigationActions.ToDetail -> {
+                val fragment = RestaurantDetailFragment.newInstance(action.uniqueKey)
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
+    }
+
 
     private fun handleLocationServiceAndPermission() {
         if (isLocationServiceEnabled()) {
