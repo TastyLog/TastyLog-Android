@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.knu.retastylog.designsystem"
 }
+dependencies {
+    implementation(project(":domain:home"))
+    implementation(project(":core:common"))
+}
