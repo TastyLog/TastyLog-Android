@@ -4,9 +4,9 @@ plugins {
 }
 
 android {
-    namespace = "com.knu.retastylog.designsystem"
+    namespace = "com.knu.retastylog.youtube"
 }
+
 dependencies {
-    implementation(project(":domain:home"))
-    implementation(project(":core:common"))
+    implementation(libs.youtubeplayer)
 }

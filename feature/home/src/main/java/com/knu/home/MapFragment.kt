@@ -8,13 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.kms.list.RestaurantListFragment
 import com.knu.common.view.SpaceItemDecoration
 import com.knu.common.view.viewBinding
 import com.knu.home.adapter.YoutuberAdapter
 import com.knu.home.entity.RestaurantEntity
 import com.knu.home.entity.YoutuberEntity
 import com.knu.home.utils.createCustomMarker
+import com.knu.navigation.NavigationActions
 import com.knu.retastylog.home.R
 import com.knu.retastylog.home.databinding.MapFragmentBinding
 import com.naver.maps.geometry.LatLng
@@ -95,14 +95,10 @@ class MapFragment : Fragment(R.layout.map_fragment) {
 
     private fun setupListRestaurantButtonClickListener() {
         binding.btnListRestaurantDialog.setOnClickListener {
-            val restaurantListFragment = RestaurantListFragment.newInstance(location)
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, restaurantListFragment)
-                .addToBackStack(null)
-                .commit()
+            val action = NavigationActions.ToList(location)
+            (activity as? MainActivity)?.navigate(action)
         }
     }
-
 
     // 지도 초기화, 현재 위치로 카메라 포지션 설정
     private fun initializeMap() {

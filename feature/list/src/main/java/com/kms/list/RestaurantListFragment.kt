@@ -3,13 +3,17 @@ package com.kms.list
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.knu.common.view.viewBinding
+import com.knu.navigation.NavigationActions
+import com.knu.navigation.NavigationHandler
 import com.knu.retastylog.list.R
 import com.knu.retastylog.list.databinding.ListRestaurantFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,12 +24,16 @@ class RestaurantListFragment : Fragment(R.layout.list_restaurant_fragment) {
 
     private val binding by viewBinding(ListRestaurantFragmentBinding::bind)
     private val restaurantListViewModel: RestaurantListViewModel by viewModels()
+    private val sharedRestaurantViewModel: SharedRestaurantViewModel by activityViewModels()
 
     private lateinit var location: Location
 
+
     private val restaurantAdapter by lazy {
-        RestaurantAdapter { restaurant ->
-            // 아이템 클릭 시 동작
+        RestaurantAdapter { restaurantEntity ->
+            sharedRestaurantViewModel.setSelectedRestaurant(restaurantEntity)
+            val action = NavigationActions.ToDetail(restaurantEntity.uniqueKey)
+            (activity as? NavigationHandler)?.navigate(action)
         }
     }
 
@@ -65,13 +73,14 @@ class RestaurantListFragment : Fragment(R.layout.list_restaurant_fragment) {
                         val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                         val totalItemCount = layoutManager.itemCount
 
-                        // 마지막 항목이 보이기 시작할 때
-                        if (lastVisibleItemPosition >= (totalItemCount * 0.8).toInt() && !restaurantListViewModel.isLoading.value && !restaurantListViewModel.isLastPage.value) {
-                            // 다음 페이지 로드
+                        if (lastVisibleItemPosition >= (totalItemCount * 0.8).toInt() &&
+                            !restaurantListViewModel.isLoading.value &&
+                            !restaurantListViewModel.isLastPage.value
+                        ) {
                             restaurantListViewModel.loadRestaurantList(location.latitude, location.longitude)
                         }
                     }
-                }
+                },
             )
         }
     }
