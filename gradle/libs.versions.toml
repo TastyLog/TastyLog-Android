@@ -24,7 +24,7 @@ firebaseMessagingKtx = "24.0.0"
 
 # AndroidX
 androidx-lifecycle = "2.8.6"
-androidx-navigation = "2.8.1"
+androidx-navigation = "2.8.4"
 androidx-activity-ktx = "1.9.2"
 fragment-ktx = "1.8.3"
 androidx-splash-screen = "1.0.1"
