@@ -1,15 +1,25 @@
 package com.knu.home
 
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.LifecycleOwner
 import coil.load
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.kakao.sdk.share.ShareClient
+import com.kakao.sdk.share.WebSharerClient
+import com.kakao.sdk.template.model.Button
+import com.kakao.sdk.template.model.Content
+import com.kakao.sdk.template.model.FeedTemplate
+import com.kakao.sdk.template.model.Link
+import com.knu.designsystem.button.ActionButtonFactory
 import com.knu.home.entity.RestaurantEntity
 import com.knu.retastylog.home.R
 import com.knu.retastylog.home.databinding.ItemBottomSheetBinding
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
+import com.knu.youtube.YouTubePlayerManager
+import com.knu.youtube.YouTubeUtils
 
 class BottomSheetHelper private constructor(
     private val bottomSheetBehavior: BottomSheetBehavior<CoordinatorLayout>,
@@ -17,8 +27,7 @@ class BottomSheetHelper private constructor(
     private val listButton: View,
     private val lifecycleOwner: LifecycleOwner,
 ) {
-    private var youTubePlayer: YouTubePlayer? = null
-    private var lastPlayedPosition: Float? = null
+    private lateinit var youTubePlayerManager: YouTubePlayerManager
     private var currentVideoId: String? = null
     private var isBottomSheetCalledOnce = false
 
@@ -26,7 +35,8 @@ class BottomSheetHelper private constructor(
     fun initializeBottomSheet() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         bottomSheetBehavior.addBottomSheetCallback(createBottomSheetCallback())
-        lifecycleOwner.lifecycle.addObserver(bottomSheetBinding.ypvRestaurant)
+        youTubePlayerManager = YouTubePlayerManager(bottomSheetBinding.ypvRestaurant)
+        youTubePlayerManager.initialize { }
     }
 
     // BottomSheet 상태 변경 콜백 함수
@@ -36,7 +46,7 @@ class BottomSheetHelper private constructor(
                 BottomSheetBehavior.STATE_EXPANDED -> listButton.visibility = View.GONE
                 BottomSheetBehavior.STATE_COLLAPSED, BottomSheetBehavior.STATE_HIDDEN -> {
                     listButton.visibility = View.VISIBLE
-                    pauseYoutubeVideo()
+                    youTubePlayerManager.pauseVideo()
                 }
             }
         }
@@ -46,10 +56,13 @@ class BottomSheetHelper private constructor(
 
     // 레스토랑 정보 & 바텀시트
     fun showBottomSheetWithRestaurantInfo(restaurant: RestaurantEntity) {
-        val newVideoId = extractYoutubeId(restaurant.youtuberLink)
-        if (currentVideoId != newVideoId) resetYoutubePlayerIfNeeded(newVideoId)
+        val newVideoId = YouTubeUtils.extractYoutubeId(restaurant.youtuberLink)
+        if (currentVideoId != newVideoId) {
+            currentVideoId = newVideoId
+            youTubePlayerManager.cueVideo(newVideoId)
+        }
         displayRestaurantInfo(restaurant, newVideoId)
-        setYoutubeIconClickListener(newVideoId)
+        setupYoutubeIconClickListener(newVideoId)
         ensureBottomSheetVisible()
         openBottomSheet()
         setupButtons(restaurant)
@@ -70,7 +83,7 @@ class BottomSheetHelper private constructor(
         }
     }
 
-    private fun setYoutubeIconClickListener(newVideoId: String) {
+    private fun setupYoutubeIconClickListener(newVideoId: String) {
         bottomSheetBinding.ivBsYoutubeIcon.setOnClickListener {
             playYoutubeVideo(newVideoId)
         }
@@ -83,56 +96,14 @@ class BottomSheetHelper private constructor(
         }
     }
 
-
-    // 유튜브 ID 추출
-    private fun extractYoutubeId(youtuberLink: String): String = youtuberLink.split("v=")[1].split("&")[0]
-
-    // YouTubePlayer 초기화 및 상태 리셋
-    private fun resetYoutubePlayerIfNeeded(newVideoId: String) {
-        currentVideoId = newVideoId
-        lastPlayedPosition = null
-        youTubePlayer = null
-        initializeYoutubePlayer()
-    }
-
-    // 유튜브 플레이어 초기화
-    private fun initializeYoutubePlayer() {
-        with(bottomSheetBinding) {
-            ivBsYoutubeThumnail.visibility = View.VISIBLE
-            ivBsYoutubeIcon.visibility = View.VISIBLE
-            ypvRestaurant.visibility = View.GONE
-
-            ypvRestaurant.getYouTubePlayerWhenReady(
-                object : YouTubePlayerCallback {
-                    override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
-                        this@BottomSheetHelper.youTubePlayer = youTubePlayer
-                        lastPlayedPosition?.let {
-                            youTubePlayer.seekTo(it) // 마지막 재생 위치로 이동
-                        }
-                    }
-                },
-            )
-
-        }
-    }
-
-    // 유튜브 동영상 재생
     private fun playYoutubeVideo(videoId: String) {
         with(bottomSheetBinding) {
             ivBsYoutubeThumnail.visibility = View.GONE
             ivBsYoutubeIcon.visibility = View.GONE
             ypvRestaurant.visibility = View.VISIBLE
-
-            youTubePlayer?.let { player ->
-                lastPlayedPosition?.let { player.seekTo(it) }
-                player.loadVideo(videoId, lastPlayedPosition ?: 0f)
-            }
         }
-    }
 
-    // 유튜브 동영상 일시정지
-    private fun pauseYoutubeVideo() {
-        youTubePlayer?.pause()
+        youTubePlayerManager.playVideo(videoId)
     }
 
     // BottomSheet 열기
@@ -144,8 +115,46 @@ class BottomSheetHelper private constructor(
     private fun setupButtons(restaurant: RestaurantEntity) {
         val buttonsContainer = bottomSheetBinding.llButtonsContainer
         buttonsContainer.removeAllViews()
-        val buttonFactory = ActionButtonFactory(bottomSheetBinding.root.context, buttonsContainer, restaurant)
+
+        val sendKakaoLinkAction = { sendKakaoLink(restaurant) }
+
+        val buttonFactory = ActionButtonFactory(
+            context = bottomSheetBinding.root.context,
+            container = buttonsContainer,
+            restaurant = restaurant,
+            sendKakaoLinkAction = sendKakaoLinkAction, // 동작 주입
+        )
         buttonFactory.addButtons()
+    }
+
+    // 카카오 링크 공유 동작
+    private fun sendKakaoLink(restaurant: RestaurantEntity) {
+        val defaultFeed = FeedTemplate(
+            content = Content(
+                title = restaurant.name,
+                description = restaurant.address,
+                imageUrl = restaurant.representativeImage,
+                link = Link(mobileWebUrl = restaurant.naverLink, webUrl = restaurant.naverLink),
+            ),
+            buttons = listOf(Button("자세히 보기", Link(mobileWebUrl = restaurant.naverLink, webUrl = restaurant.naverLink))),
+        )
+
+        if (ShareClient.instance.isKakaoTalkSharingAvailable(bottomSheetBinding.root.context)) {
+            ShareClient.instance.shareDefault(bottomSheetBinding.root.context, defaultFeed) { sharingResult, error ->
+                if (error != null) {
+                    Log.e("KakaoLink", "공유 실패", error)
+                } else {
+                    sharingResult?.intent?.let { bottomSheetBinding.root.context.startActivity(it) }
+                }
+            }
+        } else {
+            val sharerUrl = WebSharerClient.instance.makeDefaultUrl(defaultFeed)
+            openWebPage(sharerUrl.toString())
+        }
+    }
+
+    private fun openWebPage(url: String) {
+        bottomSheetBinding.root.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
     }
 
 
