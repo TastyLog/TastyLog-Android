@@ -1,10 +1,12 @@
 package com.kms.list
 
+import android.content.Intent
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -16,6 +18,7 @@ import com.knu.navigation.NavigationActions
 import com.knu.navigation.NavigationHandler
 import com.knu.retastylog.list.R
 import com.knu.retastylog.list.databinding.ListRestaurantFragmentBinding
+import com.knu.search.SearchRestaurantActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -28,6 +31,16 @@ class RestaurantListFragment : Fragment(R.layout.list_restaurant_fragment) {
 
     private lateinit var location: Location
 
+    private val searchActivityLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == AppCompatActivity.RESULT_OK) {
+                val keyword = result.data?.getStringExtra("searchKeyword")
+                keyword?.let {
+                    updateSearchField(it)
+                    searchRestaurants(it)
+                }
+            }
+        }
 
     private val restaurantAdapter by lazy {
         RestaurantAdapter { restaurantEntity ->
@@ -42,7 +55,24 @@ class RestaurantListFragment : Fragment(R.layout.list_restaurant_fragment) {
         location = getLocationFromArguments()
         setupRecyclerView()
         observeRestaurantList()
-        restaurantListViewModel.loadRestaurantList(location.latitude, location.longitude)
+
+        if (!restaurantListViewModel.isSearchActive.value) {
+            restaurantListViewModel.loadRestaurantList(location.latitude, location.longitude)
+        }
+
+        binding.edtListRestaurantSearch.setOnClickListener {
+            val intent = Intent(requireContext(), SearchRestaurantActivity::class.java)
+            searchActivityLauncher.launch(intent)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val isSearchActive = restaurantListViewModel.isSearchActive.value
+        val lastSearchKeyword = restaurantListViewModel.lastSearchKeyword.value
+        if (isSearchActive && !lastSearchKeyword.isNullOrEmpty()) {
+            updateSearchField(lastSearchKeyword)
+        }
     }
 
     private fun getLocationFromArguments(): Location {
@@ -73,9 +103,11 @@ class RestaurantListFragment : Fragment(R.layout.list_restaurant_fragment) {
                         val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                         val totalItemCount = layoutManager.itemCount
 
+                        val isSearchActive = restaurantListViewModel.isSearchActive.value
                         if (lastVisibleItemPosition >= (totalItemCount * 0.8).toInt() &&
                             !restaurantListViewModel.isLoading.value &&
-                            !restaurantListViewModel.isLastPage.value
+                            !restaurantListViewModel.isLastPage.value &&
+                            !isSearchActive
                         ) {
                             restaurantListViewModel.loadRestaurantList(location.latitude, location.longitude)
                         }
@@ -91,6 +123,16 @@ class RestaurantListFragment : Fragment(R.layout.list_restaurant_fragment) {
                 restaurantAdapter.submitList(restaurants)
             }
         }
+    }
+
+    private fun updateSearchField(keyword: String) {
+        binding.edtListRestaurantSearch.setText(keyword)
+    }
+
+    private fun searchRestaurants(keyword: String) {
+        if (restaurantListViewModel.isSearchActive.value) return // 이미 검색 중이면 API 호출 방지
+        restaurantListViewModel.resetState() // 상태 초기화
+        restaurantListViewModel.searchRestaurants(location.latitude, location.longitude, keyword)
     }
 
     companion object {

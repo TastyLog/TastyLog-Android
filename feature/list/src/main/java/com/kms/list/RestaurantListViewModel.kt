@@ -18,6 +18,12 @@ class RestaurantListViewModel @Inject constructor(
     private var currentPage = 0
     private val pageSize = 40
 
+    private val _isSearchActive = MutableStateFlow(false)
+    val isSearchActive: StateFlow<Boolean> get() = _isSearchActive
+
+    private val _lastSearchKeyword = MutableStateFlow<String?>(null)
+    val lastSearchKeyword: StateFlow<String?> get() = _lastSearchKeyword
+
     private val _isLastPage = MutableStateFlow(false)
     val isLastPage: StateFlow<Boolean> get() = _isLastPage
 
@@ -28,7 +34,7 @@ class RestaurantListViewModel @Inject constructor(
     val restaurantList: StateFlow<List<RestaurantEntity>> get() = _restaurantList
 
     fun loadRestaurantList(latitude: Double, longitude: Double) {
-        if (_isLoading.value || _isLastPage.value) return
+        if (_isLoading.value || _isLastPage.value || _isSearchActive.value) return
         _isLoading.value = true
 
         viewModelScope.launch {
@@ -45,5 +51,30 @@ class RestaurantListViewModel @Inject constructor(
                     _isLoading.value = false
                 }
         }
+    }
+
+    fun searchRestaurants(latitude: Double, longitude: Double, searchWord: String) {
+        _isSearchActive.value = true
+        _lastSearchKeyword.value = searchWord
+        _isLoading.value = true
+
+        viewModelScope.launch {
+            getRestaurantListUseCase(latitude, longitude, searchWord = searchWord)
+                .catch {
+                    _restaurantList.value = emptyList()
+                    _isLoading.value = false
+                    _isSearchActive.value = false
+                }
+                .collect { restaurantList ->
+                    _restaurantList.value = restaurantList
+                    _isLoading.value = false
+                }
+        }
+    }
+
+    fun resetState() {
+        currentPage = 0
+        _isLastPage.value = false
+        _restaurantList.value = emptyList()
     }
 }
