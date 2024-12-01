@@ -30,9 +30,12 @@ dependencies {
     implementation(project(":data:onboarding"))
     implementation(project(":domain:list"))
     implementation(project(":data:list"))
+    implementation(project(":domain:search"))
+    implementation(project(":data:search"))
     implementation(project(":feature:onboarding"))
     implementation(project(":feature:home"))
     implementation(project(":feature:list"))
+    implementation(project(":feature:search"))
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:network"))
@@ -42,6 +45,5 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
-
     implementation(libs.kakao.share)
 }
