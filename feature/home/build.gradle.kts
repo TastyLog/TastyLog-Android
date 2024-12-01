@@ -14,6 +14,7 @@ dependencies {
     implementation(project(":core:navigation"))
     implementation(project(":core:youtube"))
     implementation(project(":feature:list"))
+    implementation(project(":feature:search"))
     implementation(libs.fragment.ktx)
     implementation(libs.naver.map.sdk)
     implementation(libs.play.services.location)
