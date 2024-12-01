@@ -15,8 +15,9 @@ class RestaurantDataSourceImpl @Inject constructor(
         longitude: Double,
         page: Int,
         size: Int,
+        searchWord: String?,
     ): BaseResponse<List<ResponseRestaurantDto>> {
-        val response = restaurantService.getRestaurantList(latitude, longitude, page, size)
+        val response = restaurantService.getRestaurantList(latitude, longitude, page, size, searchWord)
         return BaseResponse(
             code = response.code,
             message = response.message,

@@ -14,5 +14,6 @@ interface RestaurantService {
         @Path("longitude") longitude: Double,
         @Query("page") page: Int = 0,
         @Query("size") size: Int = 1000,
+        @Query("searchWord") searchWord: String? = null
     ): BaseResponse<ResponseRestaurantListDto>
 }
