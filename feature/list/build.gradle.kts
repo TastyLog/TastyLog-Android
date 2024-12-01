@@ -13,6 +13,7 @@ dependencies{
     implementation(project(":core:network"))
     implementation(project(":core:navigation"))
     implementation(project(":core:youtube"))
+    implementation(project(":feature:search"))
     implementation(libs.fragment.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
