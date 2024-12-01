@@ -8,6 +8,7 @@ interface RestaurantRepository {
         latitude: Double,
         longitude: Double,
         page: Int = 0,   // 기본값 0
-        size: Int = 1000   // 기본값 1000
+        size: Int = 1000,   // 기본값 1000
+        searchWord: String? = null,
     ): Flow<List<RestaurantEntity>>
 }

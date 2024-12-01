@@ -11,9 +11,10 @@ class GetRestaurantListUseCase @Inject constructor(
     suspend operator fun invoke(
         latitude: Double,
         longitude: Double,
-        page: Int = 0,   // 기본값 0
-        size: Int = 1000   // 기본값 1000
+        page: Int = 0,
+        size: Int = 1000,
+        searchWord: String? = null
     ): Flow<List<RestaurantEntity>> {
-        return restaurantRepository.getRestaurantList(latitude, longitude, page, size)
+        return restaurantRepository.getRestaurantList(latitude, longitude, page, size, searchWord)
     }
 }
