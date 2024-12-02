@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/tv_search_rank_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard"
+        android:text="1"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_search_rank_keyword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/pretendard"
+        android:text="실시간 검색어"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_search_rank_number"
+        app:layout_constraintStart_toEndOf="@id/tv_search_rank_number"
+        app:layout_constraintTop_toTopOf="@+id/tv_search_rank_number" />
+
+    <ImageView
+        android:id="@+id/iv_search_rank_picture"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/icon_arrow_new"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/tv_search_rank_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_search_rank_number" />
+</androidx.constraintlayout.widget.ConstraintLayout>

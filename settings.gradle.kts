@@ -12,10 +12,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven{
+        maven {
             url = uri("https://repository.map.naver.com/archive/maven")
         }
-        maven{
+        maven {
             url = uri("https://devrepo.kakao.com/nexus/content/groups/public/")
         }
         gradlePluginPortal()
@@ -41,3 +41,6 @@ include(":domain:list")
 include(":data:list")
 include(":core:navigation")
 include(":core:youtube")
+include(":feature:search")
+include(":data:search")
+include(":domain:search")

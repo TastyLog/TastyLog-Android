@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="10dp">
+
+    <EditText
+        android:id="@+id/edt_search_restaurant"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/sv_background"
+        android:drawableStart="@drawable/ic_search_black"
+        android:hint="검색어를 입력해주세요"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:padding="8dp"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@id/tv_search_restaurant_cancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_search_restaurant_cancel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/pretendard"
+        android:text="취소"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/edt_search_restaurant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_search_restaurant_recent_search"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/naver_font_bold"
+        android:text="최근 검색어"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/tv_search_restaurant_all_delete"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_search_restaurant" />
+
+    <TextView
+        android:id="@+id/tv_search_restaurant_all_delete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:clickable="true"
+        android:fontFamily="@font/naver_font"
+        android:text="전체삭제"
+        android:textColor="@color/sub_color_gray3"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_search_restaurant_recent_search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_search_restaurant_recent_search" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_search_restaurant_recent_search"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_search_restaurant_recent_search"
+        tools:itemCount="5"
+        tools:listitem="@layout/item_search" />
+
+    <View
+        android:id="@+id/view_hr"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        android:background="#E8E9EB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rv_search_restaurant_recent_search" />
+
+    <TextView
+        android:id="@+id/tv_search_restaurant_most_search"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/naver_font_bold"
+        android:text="가장 많이 검색하고 있어요"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_hr" />
+
+    <TextView
+        android:id="@+id/tv_search_restaurant_update_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:fontFamily="@font/naver_font_bold"
+        android:text="00:00 기준"
+        android:textColor="@color/sub_color_gray3"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_search_restaurant_most_search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_search_restaurant_most_search" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_search_restaurant_most_search"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_search_restaurant_update_time"
+        tools:itemCount="7"
+        tools:listitem="@layout/item_real_time_search_term" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

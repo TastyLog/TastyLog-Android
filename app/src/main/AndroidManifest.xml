@@ -31,6 +31,10 @@
             android:name="com.knu.home.MainActivity"
             android:exported="false" />
 
+        <activity
+            android:name="com.knu.search.SearchRestaurantActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="${naverMapClientId}" />

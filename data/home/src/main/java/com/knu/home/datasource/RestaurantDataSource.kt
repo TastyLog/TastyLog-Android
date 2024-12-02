@@ -9,6 +9,7 @@ interface RestaurantDataSource {
         longitude: Double,
         page: Int = 0,
         size: Int = 1000,
+        searchWord: String? = null
     ): BaseResponse<List<ResponseRestaurantDto>>
 }
 

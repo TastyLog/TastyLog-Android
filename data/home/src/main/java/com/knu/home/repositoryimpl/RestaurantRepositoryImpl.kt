@@ -21,13 +21,14 @@ class RestaurantRepositoryImpl(
         longitude: Double,
         page: Int,
         size: Int,
+        searchWord: String?,
     ): Flow<List<RestaurantEntity>> = flow {
-        val response = dataSource.fetchRestaurantList(latitude, longitude, page, size)
+        val response = dataSource.fetchRestaurantList(latitude, longitude, page, size, searchWord)
         if (response.code == SUCCESS_CODE) {
             val restaurants = mapper.mapToDomainList(response.data ?: emptyList())
             emit(restaurants)
         } else {
-            emit(emptyList()) // 에러 처리 시 좀 더 구체적인 방법을 고려할 수 있습니다.
+            emit(emptyList())
         }
     }
 }

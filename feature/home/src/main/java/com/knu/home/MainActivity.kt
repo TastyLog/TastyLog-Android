@@ -22,6 +22,7 @@ import com.knu.navigation.NavigationActions
 import com.knu.navigation.NavigationHandler
 import com.knu.retastylog.home.R
 import com.knu.retastylog.home.databinding.MainActivityBinding
+import com.knu.search.SearchRestaurantActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -63,6 +64,11 @@ class MainActivity : AppCompatActivity(), NavigationHandler {
                     .replace(R.id.frame_layout, fragment)
                     .addToBackStack(null)
                     .commit()
+            }
+            is NavigationActions.ToSearch -> {
+                // navigate to search
+                val intent = Intent(this, SearchRestaurantActivity::class.java)
+                startActivity(intent)
             }
         }
     }

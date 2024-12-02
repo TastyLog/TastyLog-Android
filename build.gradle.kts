@@ -29,4 +29,4 @@ buildscript {
         classpath("com.vanniktech:gradle-dependency-graph-generator-plugin:0.8.0")
     }
 }
-apply(plugin = "com.vanniktech.dependency.graph.generator")  // 플러그인 적용
+apply(plugin = "com.vanniktech.dependency.graph.generator") // 플러그인 적용
