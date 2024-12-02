@@ -25,6 +25,4 @@ class SearchRankRepositoryImpl @Inject constructor(
             emptyList()
         }
     }
-
 }
-

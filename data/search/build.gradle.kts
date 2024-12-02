@@ -13,5 +13,4 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(libs.bundles.retrofit)
     implementation(libs.kotlin.coroutines.core)
-    implementation(libs.androidx.hilt.common)
 }
